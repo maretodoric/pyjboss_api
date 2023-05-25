@@ -254,7 +254,10 @@ class Model(dict):
         if self._expandable:
             _res = Call(self._connection, Payload(f"{self._address}={name}", ADD, **{ k.replace("_", "-"): kwargs.get(k) for k in kwargs }))
             if _res.success:
-                setattr(self, pyattr(name), Resource(connection = self._connection, child = self._child['model-description']['*'], address = "%s=%s" % (self._address, quote_plus(name)), parent = self, initial_run = False))
+                _resource = Resource(connection = self._connection, child = self._child['model-description']['*'], address = "%s=%s" % (self._address, quote_plus(name)), parent = self, initial_run = False)
+                setattr(self, pyattr(name), _resource)
+                self._dict.__setitem__(name, _resource)
+                self.__setitem__(name, _resource)
             return _res
         else:
             raise UnsupportedOperation("add")
@@ -302,6 +305,8 @@ class Operation:
         res = Call(self._connection, Payload(self._address, self._name, **{ k.replace("_", "-"): kwargs.get(k) for k in kwargs }))
         if self._name == 'remove' and res.success:
             delattr(self._parent, self._address.str_address.split("=")[-1])
+            self._parent._dict.__delitem__(self._address.str_address.split("=")[-1])
+            self._parent.__delitem__(self._address.str_address.split("=")[-1])
         return res
     
     @property
