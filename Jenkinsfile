@@ -34,12 +34,12 @@ pipeline {
                 sh '''
                     cd test
 
-                    for python in 3.10; do
+                    for python in 3.10 3.9 3.8 3.7 3.6; do
                         echo "Preparing Dockerfile for python version $python"
                         sed -i "s/^FROM python.*/FROM python:$python/g" Dockerfile
 
                         docker build . -t pyjboss_pipeline_test && docker run --rm --ulimit nofile=122880:122880 pyjboss_pipeline_test
-                        docker image rm pyjboss_pipeline_test python:$python
+                        docker image rm pyjboss_pipeline_test
                     done
                 '''
             }
