@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                sh 'printenv' 
+                sh 'printenv'  
                 GIT_BRANCH_LOCAL = sh (
                     script: 'echo ${GIT_BRANCH#*/}',
                     returnStdout: true
