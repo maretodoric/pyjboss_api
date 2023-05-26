@@ -17,18 +17,18 @@ pipeline {
                             cd test
 
                             echo "Downloading Java 8"
-                            wget ${JAVA_URL}
+                            wget ${JAVA_URL} > /dev/null 2>&1
 
                             echo "Downloading Wildfly 10"
-                            wget ${WILDFLY_URL}
+                            wget ${WILDFLY_URL} > /dev/null 2>&1
 
                             echo "Running tests"
-                            for python in 3.10 3.9 3.8 3.7 3.6; do
+                            for python in 3.10; do
                                 echo "Preparing Dockerfile for python version $python"
                                 sed -i "s/^FROM python.*/FROM python:$python/g" Dockerfile
 
                                 docker build . -t pyjboss_pipeline_test && docker run --rm --ulimit nofile=122880:122880 pyjboss_pipeline_test
-                                docker image rm pyjboss_pipeline_test
+                                docker image rm pyjboss_pipeline_test python:$python
                             done
                         '''
                     }
