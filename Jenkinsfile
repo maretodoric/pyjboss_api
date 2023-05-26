@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                sh 'printenv' 
+                sh 'printenv'
                 git credentialsId: 'mtodoric_ssh', url: 'git@github.com:maretodoric/pyjboss_api.git'
             }
         }
