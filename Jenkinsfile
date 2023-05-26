@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
+                sh 'ls -la'
                 git 'https://github.com/maretodoric/pyjboss_api.git'
             }
         }
