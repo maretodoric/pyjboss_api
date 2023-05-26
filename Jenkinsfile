@@ -4,13 +4,17 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                sh 'printenv'  
-                GIT_BRANCH_LOCAL = sh (
-                    script: 'echo ${GIT_BRANCH#*/}',
-                    returnStdout: true
-                ).trim()
-                echo "Cloning Git Branch: ${GIT_BRANCH_LOCAL}"
-                git credentialsId: 'mtodoric_ssh', url: 'git@github.com:maretodoric/pyjboss_api.git', branch: GIT_BRANCH_LOCAL
+                sh 'printenv'
+                script {
+                    // Get branch name
+                    GIT_BRANCH_LOCAL = sh (
+                        script: 'echo ${GIT_BRANCH#*/}',
+                        returnStdout: true
+                    ).trim()
+                    
+                    echo "Cloning Git Branch: ${GIT_BRANCH_LOCAL}"
+                    git credentialsId: 'mtodoric_ssh', url: 'git@github.com:maretodoric/pyjboss_api.git', branch: GIT_BRANCH_LOCAL
+                }
             }
         }
 
